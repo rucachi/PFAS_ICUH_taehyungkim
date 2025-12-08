@@ -1,0 +1,105 @@
+DIMSpec Table Explorer Parameters
+=================================
+
+This file lists all available options in the "Choose a table or view" dropdown, categorized by their function.
+
+1. Core Data Tables (핵심 데이터)
+---------------------------------
+Primary tables storing the main scientific data.
+- compounds: Information about chemical compounds (PFAS).
+- samples: Information about the physical samples analyzed.
+- peaks: Detected peaks in the mass spectrometry data.
+- ms_data: Raw mass spectrometry data points (m/z, intensity).
+- peak_data: Detailed data associated with specific peaks.
+- peak_spectra: Spectral data linked to peaks.
+- qc_data: Quality control data.
+
+2. Reference & Metadata Tables (참조 및 메타데이터)
+---------------------------------------------------
+Tables defining methods, equipment, and standards.
+- chromatography_types: Types of chromatography used.
+- column_chemistries: Information about column chemistry.
+- detectors: Types of detectors used.
+- mass_analyzers: Types of mass analyzers.
+- mobile_phases: Solvents/mixtures used in the mobile phase.
+- ms_methods: Mass spectrometry methods.
+- qc_methods: Quality control methods.
+- method: General method descriptions.
+- contributors: Data contributors and authors.
+- element_isotopes: Isotopic information for elements.
+- exact_masses: Exact mass reference values.
+- opt_ums_params: Optimization parameters.
+- version_history: Database version tracking.
+- logs: Application or data processing logs.
+
+3. Normalization Tables (정규화 테이블 - prefix: norm_)
+-------------------------------------------------------
+Tables used for standardizing vocabulary and values across the database.
+- norm_chromatography_types
+- norm_column_chemistries
+- norm_contributors_affiliation
+- norm_contributors_name
+- norm_detectors
+- norm_fragment_sources
+- norm_mass_analyzers
+- norm_qc_methods_name
+- norm_qc_methods_reference
+- norm_sample_classes
+- norm_source_types
+- norm_vendors
+- norm_voltage_units
+
+4. Relationship & Alias Tables (관계 및 별칭)
+---------------------------------------------
+Tables handling many-to-many relationships and alternative names.
+- additive_aliases
+- annotated_fragments
+- carrier_additives
+- carrier_aliases
+- carrier_mix
+- carrier_mix_collection
+- carrier_mixes
+- compound_aliases
+- compound_fragments
+- fragment_aliases
+- fragment_sources
+- sample_aliases
+
+5. Database Views (데이터베이스 뷰 - prefix: view_)
+---------------------------------------------------
+Virtual tables that combine data from multiple tables for easier viewing.
+- view_additive_aliases
+- view_annotated_fragments
+- view_carrier_additives
+- view_carrier_aliases
+- view_carrier_mix
+- view_carrier_mix_collection
+- view_carrier_mixes
+- view_chromatography_types
+- view_column_chemistries
+- view_compound_aliases
+- view_compound_fragments
+- view_compound_fragments_stats
+- view_compounds: Comprehensive view of compound data.
+- view_contributors
+- view_detectors
+- view_element_isotopes
+- view_exact_masses
+- view_fragment_aliases
+- view_fragment_count
+- view_fragment_mz_stats
+- view_fragment_sources
+- view_logs
+- view_mass_analyzers
+- view_masserror
+- view_method
+- view_method_narrative
+- view_mobile_phase_narrative
+- view_mobile_phases
+- view_ms_descriptions
+- view_ms_methods
+- view_peaks
+- view_qc_methods
+- view_sample_narrative
+- view_samples
+- view_separation_types

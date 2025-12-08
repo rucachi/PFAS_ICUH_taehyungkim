@@ -1,0 +1,113 @@
+✅ Found database: C:\Users\USER\Desktop\dimspec-main\dimspec-main\dimspec-streamlit\data\dimspec_nist_pfas.sqlite
+\n📊 Tables found (103):
+  - config
+  - elements
+  - isotopes
+  - view_element_isotopes
+  - view_exact_masses
+  - norm_ionization
+  - norm_carriers
+  - norm_additives
+  - norm_vendors
+  - norm_ce_desc
+  - norm_ce_units
+  - norm_voltage_units
+  - norm_ms_types
+  - norm_ms_n_types
+  - norm_fragmentation_types
+  - norm_polarity_types
+  - norm_chromatography_types
+  - norm_column_chemistries
+  - norm_column_positions
+  - norm_duration_units
+  - norm_additive_units
+  - norm_flow_units
+  - carrier_mix_collections
+  - mobile_phases
+  - ms_descriptions
+  - chromatography_descriptions
+  - ms_methods
+  - carrier_aliases
+  - additive_aliases
+  - carrier_mixes
+  - carrier_additives
+  - view_mass_analyzers
+  - view_chromatography_types
+  - view_carrier_mix
+  - view_carrier_additives
+  - view_carrier_mix_collection
+  - view_mobile_phase_narrative
+  - view_detectors
+  - view_column_chemistries
+  - view_method_narrative
+  - norm_generation_type
+  - norm_source_types
+  - compound_categories
+  - norm_analyte_alias_references
+  - compounds
+  - compound_aliases
+  - compound_fragments
+  - annotated_fragments
+  - fragment_inspections
+  - norm_fragments
+  - fragment_aliases
+  - fragment_sources
+  - compound_data
+  - view_compound_fragments
+  - view_compound_fragments_stats
+  - view_fragment_count
+  - view_annotated_fragments
+  - view_fragment_mz_stats
+  - compound_url
+  - norm_sample_classes
+  - norm_ion_states
+  - norm_peak_confidence
+  - norm_qc_methods_reference
+  - norm_qc_methods_name
+  - samples
+  - sample_aliases
+  - conversion_software_peaks_linkage
+  - conversion_software_settings
+  - peaks
+  - ms_data
+  - ms_spectra
+  - qc_methods
+  - opt_ums_params
+  - instrument_properties
+  - view_samples
+  - view_sample_narrative
+  - view_peaks
+  - peak_data
+  - peak_spectra
+  - view_masserror
+  - contributors
+  - affiliations
+  - view_contributors
+  - norm_log_executed_from
+  - norm_log_effect
+  - version_history
+  - logs
+  - log_summaries
+  - view_additive_aliases
+  - view_compound_aliases
+  - view_compounds
+  - view_fragment_aliases
+  - view_fragment_sources
+  - view_logs
+  - view_mobile_phases
+  - view_ms_descriptions
+  - view_ms_methods
+  - view_qc_methods
+  - view_carrier_aliases
+  - view_carrier_mixes
+  - qc_data
+  - view_separation_types
+  - view_method
+\n🔍 Checking 'compounds' table:
+  Columns: ['id', 'category', 'name', 'obtained_from', 'source_type', 'additional', 'local_positive', 'local_negative', 'formula', 'fixedmass', 'netcharge', 'inspected_by', 'inspected_on']
+  Sample row: {'id': 1, 'category': 2, 'name': '1H-Perfluoro-3,3-bis(trifluoromethyl)hexyne', 'obtained_from': 'https://comptox.epa.gov/dashboard', 'source_type': 1, 'additional': 'DTXSID:DTXSID60893374;DTXCID:DTXCID801323380;CASRN:261503-44-0', 'local_positive': 0, 'local_negative': 0, 'formula': 'C8HF13', 'fixedmass': 343.9870669, 'netcharge': 0, 'inspected_by': None, 'inspected_on': None}
+\n🔍 Checking 'ms_data' table:
+  Columns: ['id', 'peak_id', 'ms_n', 'scantime', 'base_ion', 'base_int', 'measured_mz', 'measured_intensity']
+  Sample row: {'id': 1, 'peak_id': 1, 'ms_n': 1, 'scantime': 16.8224, 'base_ion': 529.0815, 'base_int': 2311.1898, 'measured_mz': '529.0815 530.0845 531.0778', 'measured_intensity': '2311.18977520742 125.047514101823 438.075452120501'}
+\n🔍 Checking 'peaks' table/view:
+  Columns: ['id', 'sample_id', 'conversion_software_peaks_linkage_id', 'num_points', 'precursor_mz', 'ion_state', 'rt_start', 'rt_centroid', 'rt_end', 'identification_confidence']

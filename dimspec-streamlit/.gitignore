@@ -1,0 +1,6 @@
+# Ignore large database file (>100MB)
+data/pfas_dimspec.db
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,110 @@
+import sys
+import os
+from pathlib import Path
+import pandas as pd
+
+# Add current directory to path to import utils
+sys.path.append(str(Path(__file__).parent))
+
+from utils.database import (
+    connect_db, get_tables, get_table_data, search_table,
+    get_compound_by_name, get_compound_details, get_spectrum_data
+)
+
+DB_PATH = Path(__file__).parent / "data" / "dimspec_nist_pfas.sqlite"
+
+def test_table_explorer(conn):
+    print("\n🧪 Testing Table Explorer...")
+    tables = get_tables(conn)
+    print(f"  Found {len(tables)} tables.")
+    if not tables:
+        print("  ❌ No tables found.")
+        return False
+    
+    table = "compounds"
+    if table in tables:
+        df = get_table_data(conn, table, limit=5)
+        print(f"  'compounds' table data shape: {df.shape}")
+        if df.empty:
+            print("  ❌ 'compounds' table is empty.")
+            return False
+        
+        # Test search
+        search_term = "Perfluoro"
+        df_search = search_table(conn, table, search_term, limit=5)
+        print(f"  Search for '{search_term}' returned {len(df_search)} rows.")
+        if df_search.empty:
+            print("  ⚠️ Search returned no results (might be expected depending on data).")
+    return True
+
+def test_compound_search(conn):
+    print("\n🧪 Testing Compound Search...")
+    # Try to find a compound from the previous step or just a common one
+    term = "PFOA" # Common PFAS
+    results = get_compound_by_name(conn, term)
+    print(f"  Search for '{term}' returned {len(results)} results.")
+    
+    if not results.empty:
+        compound_id = results.iloc[0]['id']
+        details = get_compound_details(conn, compound_id)
+        print(f"  Details for ID {compound_id}: {details.keys() if details else 'None'}")
+        if not details:
+            print("  ❌ Could not get details for found compound.")
+            return False
+    else:
+        print("  ⚠️ No compounds found for 'PFOA'. Trying generic search.")
+        results = get_compound_by_name(conn, "a") # Should match something
+        print(f"  Generic search 'a' returned {len(results)} results.")
+        if results.empty:
+             print("  ❌ Compound search seems broken.")
+             return False
+    return True
+
+def test_spectrum_viewer(conn):
+    print("\n🧪 Testing Spectrum Viewer...")
+    # Need a valid peak_id. Let's get one from ms_data or peaks
+    cursor = conn.cursor()
+    cursor.execute("SELECT peak_id FROM ms_data LIMIT 1")
+    row = cursor.fetchone()
+    if row:
+        peak_id = row[0]
+        print(f"  Testing with Peak ID: {peak_id}")
+        data = get_spectrum_data(conn, peak_id)
+        if data:
+            mz, intensity = data
+            print(f"  Got spectrum data: {len(mz)} m/z points, {len(intensity)} intensity points.")
+            if len(mz) != len(intensity):
+                print("  ❌ Mismatch in data lengths.")
+                return False
+        else:
+            print("  ❌ Failed to retrieve spectrum data.")
+            return False
+    else:
+        print("  ⚠️ No data in ms_data table to test with.")
+    return True
+
+def main():
+    if not DB_PATH.exists():
+        print(f"❌ Database not found at {DB_PATH}")
+        sys.exit(1)
+        
+    conn = connect_db(str(DB_PATH))
+    if not conn:
+        print("❌ Failed to connect to database.")
+        sys.exit(1)
+        
+    print(f"✅ Connected to {DB_PATH.name}")
+    
+    success = True
+    success &= test_table_explorer(conn)
+    success &= test_compound_search(conn)
+    success &= test_spectrum_viewer(conn)
+    
+    if success:
+        print("\n✅ All backend logic tests passed!")
+    else:
+        print("\n❌ Some tests failed.")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
