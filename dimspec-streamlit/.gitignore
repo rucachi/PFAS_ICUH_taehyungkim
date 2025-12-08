@@ -1,5 +1,5 @@
 # Ignore large database file (>100MB)
-data/pfas_dimspec.db
+data/dimspec_nist_pfas.sqlite
 
 # Python
 __pycache__/

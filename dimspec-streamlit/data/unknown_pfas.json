@@ -1,0 +1,12 @@
+[
+  {
+    "id": "UNK_PFAS_0001",
+    "timestamp": "2025-12-09T08:33:25.985684",
+    "input_mz": 200.0,
+    "input_rt": 1.2,
+    "predicted_class": "Unknown",
+    "similarity_score": 0.0,
+    "status": "New",
+    "candidates_snapshot": []
+  }
+]
