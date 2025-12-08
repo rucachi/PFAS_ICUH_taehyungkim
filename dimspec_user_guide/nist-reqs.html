@@ -1,0 +1,78 @@
+<!-- Insert NIST header and footer -->
+  <link rel="stylesheet" href="https://pages.nist.gov/nist-header-footer/css/nist-combined.css" />
+  <!-- The live updating version is preferrable, but it causes race conditions in the DOM with auto formatting based on whether or not the NIST header/footer can be loaded. That script has been recreated here with the proper modifications to override gitbook CSS with the NIST header styling; see below.
+    <script src="https://pages.nist.gov/nist-header-footer/js/nist-header-footer.js" type="text/javascript" defer="defer"></script>
+  -->
+  <!-- Project already includes jQuery 3.6 as part of gitbook -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.2.min.js" type="text/javascript" defer="defer"></script> -->
+  <!-- Insert NIST leave notice -->
+  <!-- Project already includes jQuery 3.6 as part of gitbook -->
+  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+  <script type="text/javascript" src="https://pages.nist.gov/leaveNotice/js/jquery.leaveNotice-nist.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://pages.nist.gov/leaveNotice/css/jquery.leaveNotice.css" />
+  <script type="text/javascript" defer="defer">
+    $(document).ready(function(){
+      var divider = $('<li class="divider"></li>');
+      var online_user_guide_link = $('<li><a href="https://pages.nist.gov/dimspec/docs/index.html" target="_blank"><i class="fa fa-bookmark"></i><p style="display: inline; font-weight: bold;">&nbsp&nbspOnline Version</p></a>');
+      var nist_pao_privacy_link = $('<li><a href="http://www.nist.gov/public_affairs/privacy.cfm#privpolicy" target="_blank"><i class="fa fa-info-circle"></i><p style="display: inline;">&nbsp&nbspSite Privacy</p></a>');
+      var nist_disclaimers_link = $('<li><a href="https://www.nist.gov/disclaimer" target="_blank"><i class="fa fa-info-circle"></i><p style="display: inline;">&nbsp&nbspDisclaimers</p></a>');
+      var nist_pfas_program = $('<li><a href="https://www.nist.gov/programs-projects/and-polyfluoroalkyl-substances-pfas/research/reference-data-and-tools" target="_blank"><i class="fa fa-info-circle"></i><p style="display: inline;">&nbsp&nbspNIST PFAS Program - Tools</p></a>');
+      $("body").prepend('<div id="nistheadergoeshere"></div>');
+      $(".summary").append(divider);
+      $.ajax({
+        url: "https://pages.nist.gov/nist-header-footer/boilerplate-header.html",
+        cache: false,
+        dataType: "html"
+      })
+      .done(function (data) {
+        $('#nistheadergoeshere').append(data);
+        // Mark external (non-nist.gov) A tags with class "external"
+        // If the adress start with https and ends with nist.gov
+        var re_nist = new RegExp('^https?:\/\/((^\/)*\.)*nist\\.gov(\/|$)'); 
+        // Regex to find address that start with https 
+        var re_absolute_address = new RegExp('^((https?:)?\/\/)');
+        $("a").each(function(){
+          var url=$(this).attr('href'); 
+          if(re_nist.test(url) || !re_absolute_address.test(url)){
+            $(this).addClass('local'); 
+          }else{
+            $(this).addClass('external');
+          } 
+        });
+        // Add leaveNotice to external A elements 
+        $('a.external').leaveNotice({
+          siteName: 'the DIMSpec User Guide',
+        });
+        // Add proper markings for NIST footer placement at bottom of page
+        $("html").addClass('nist-footer-bottom');
+        $("body").attr('id', 'main');
+        // Hide the NIST logo, which is displayed on local copies lacking the NIST header and footer.
+        $("#nist-logo-link").hide();
+        // Set the background of the gitbook header to match that of the NIST header.
+        $(".book-header").addClass("nist-style-header");
+        var more_styles = $("<style>.nist-style-header { background-color: " + $("#nist-header").css("background-color") + " !important; }</style>");
+        $("html > head").append(more_styles);
+        $(".summary").append(nist_pfas_program);
+        $(".summary").append(nist_pao_privacy_link);
+        $(".summary").append(nist_disclaimers_link);
+      })
+      .fail(function() {
+        // The gitbook search tool does not work when launched locally as it is not using a web server.
+        $(".js-toolbar-action[aria-label='Search']").remove();
+        $(".summary").append(online_user_guide_link);
+        $(".summary").append(nist_pfas_program);
+        $(".summary").append(nist_disclaimers_link);
+      });
+      $("body").append('<div id="nistfootergoeshere"></div>');
+      $.ajax({
+        url: "https://pages.nist.gov/nist-header-footer/boilerplate-footer.html",
+        cache: false,
+        dataType: "html"
+      })
+      .done(function (data) {
+        $('#nistfootergoeshere').append(data);
+      });
+    });
+  </script>
+<!-- Insert NIST GA, uncomment the next line to activate.  -->
+<script async type="text/javascript" id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NIST&subagency=github&pua=UA-66610693-1&yt=true&exts=ppsx,pps,f90,sch,rtf,wrl,txz,m1v,xlsm,msi,xsd,f,tif,eps,mpg,xml,pl,xlt,c"></script>
