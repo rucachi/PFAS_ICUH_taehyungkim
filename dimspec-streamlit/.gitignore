@@ -4,3 +4,11 @@ data/pfas_dimspec.db
 # Python
 __pycache__/
 *.pyc
+
+# SQLite temporary files
+*.sqlite-shm
+*.sqlite-wal
+
+# Temporary scripts
+inspect_*.py
+verify_*.py

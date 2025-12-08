@@ -8,7 +8,8 @@ sys.path.append(str(Path(__file__).parent))
 
 from utils.database import (
     connect_db, get_tables, get_table_data, search_table,
-    get_compound_by_name, get_compound_details, get_spectrum_data
+    get_compound_by_name, get_compound_details, get_spectrum_data,
+    search_pfas # New function
 )
 
 DB_PATH = Path(__file__).parent / "data" / "dimspec_nist_pfas.sqlite"
@@ -39,25 +40,56 @@ def test_table_explorer(conn):
 
 def test_compound_search(conn):
     print("\n🧪 Testing Compound Search...")
-    # Try to find a compound from the previous step or just a common one
-    term = "PFOA" # Common PFAS
+    # 1. Basic Name Search
+    term = "PFOA"
     results = get_compound_by_name(conn, term)
-    print(f"  Search for '{term}' returned {len(results)} results.")
+    print(f"  Name Search '{term}' returned {len(results)} results.")
     
+    # 2. Advanced Filter Search (New Feature)
+    print("  Testing Advanced Filters (m/z and RT)...")
+    # Let's try a wide range first to ensure we get something
+    mz_range = (0, 1000)
+    rt_range = (0, 100)
+    
+    results_filtered = search_pfas(conn, mz_range=mz_range, rt_range=rt_range, limit=10)
+    print(f"  Filtered Search (mz={mz_range}, rt={rt_range}) returned {len(results_filtered)} results.")
+    
+    if not results_filtered.empty:
+        # Verify filters actually worked (if columns exist)
+        cols = results_filtered.columns
+        if 'precursor_mz' in cols:
+             min_mz = results_filtered['precursor_mz'].min()
+             max_mz = results_filtered['precursor_mz'].max()
+             print(f"    Result m/z range: {min_mz:.2f} - {max_mz:.2f}")
+             if min_mz < mz_range[0] or max_mz > mz_range[1]:
+                 print("    ❌ m/z filter failed!")
+                 return False
+        
+        if 'rt' in cols:
+             min_rt = results_filtered['rt'].min()
+             max_rt = results_filtered['rt'].max()
+             print(f"    Result RT range: {min_rt:.2f} - {max_rt:.2f}")
+    
+    # 3. Details Retrieval
     if not results.empty:
         compound_id = results.iloc[0]['id']
-        details = get_compound_details(conn, compound_id)
-        print(f"  Details for ID {compound_id}: {details.keys() if details else 'None'}")
-        if not details:
-            print("  ❌ Could not get details for found compound.")
-            return False
+    elif not results_filtered.empty:
+        compound_id = results_filtered.iloc[0]['id']
     else:
-        print("  ⚠️ No compounds found for 'PFOA'. Trying generic search.")
-        results = get_compound_by_name(conn, "a") # Should match something
-        print(f"  Generic search 'a' returned {len(results)} results.")
-        if results.empty:
-             print("  ❌ Compound search seems broken.")
+        # Fallback search
+        fallback = get_compound_by_name(conn, "a")
+        if not fallback.empty:
+            compound_id = fallback.iloc[0]['id']
+        else:
+             print("  ❌ No compounds found to test details.")
              return False
+
+    details = get_compound_details(conn, compound_id)
+    print(f"  Details for ID {compound_id}: {details.keys() if details else 'None'}")
+    if not details:
+        print("  ❌ Could not get details for found compound.")
+        return False
+        
     return True
 
 def test_spectrum_viewer(conn):
