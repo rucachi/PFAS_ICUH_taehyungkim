@@ -68,11 +68,19 @@ with col3:
 st.markdown("---")
 
 # Quick diagnostics
-DB_PATH = Path(__file__).parent / "data" / "dimspec_nist_pfas.sqlite"
+
+# Quick diagnostics
+DB_PATH = get_db_path()
 if DB_PATH.exists():
     st.success(f"✅ Database connected: `{DB_PATH.name}`")
 else:
-    st.warning("⚠️ Database not found in default path. Please check the `data/` directory.")
+    st.warning(f"⚠️ Database not found at `{DB_PATH}`.")
+    st.write(f"Current Dir: {Path.cwd()}")
+    st.write("Files in 'data/':")
+    try:
+        st.code("\n".join([p.name for p in (Path.cwd() / "data").glob("*")]))
+    except Exception as e:
+        st.error(f"Could not list files: {e}")
 
 st.sidebar.success("Select a page above 👆")
 st.sidebar.markdown("---")
