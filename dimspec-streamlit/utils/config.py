@@ -13,6 +13,8 @@ DEFAULT_DB_PATH = BASE_DIR / "data" / "dimspec_nist_pfas.sqlite"
 ALTERNATIVE_DB_PATHS = [
     BASE_DIR.parent / "dimspec_nist_pfas.sqlite",
     Path("dimspec_nist_pfas.sqlite"),
+    BASE_DIR / "data" / "dimspec_sample.sqlite", # Added sample DB
+    BASE_DIR.parent / "dimspec_sample.sqlite",
 ]
 
 def get_db_path() -> Path:
