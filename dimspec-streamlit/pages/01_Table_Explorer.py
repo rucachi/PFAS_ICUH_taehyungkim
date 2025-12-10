@@ -7,7 +7,7 @@ from pathlib import Path
 # Move to root to ensure relative imports work standardly
 sys.path.append(str(Path(__file__).parent.parent))
 
-from utils.config import init_page, get_db_path, TABLE_CATEGORIES
+from utils.config import init_page, get_db_path, get_available_table_categories
 from utils import database as db
 from utils import data_processing as dp
 
@@ -15,6 +15,9 @@ from utils import data_processing as dp
 init_page("Table Explorer")
 
 st.markdown('<h1 class="main-header">📊 Table Explorer</h1>', unsafe_allow_html=True)
+
+# Get available tables/views based on current database
+TABLE_CATEGORIES = get_available_table_categories()
 
 # Function to get tables for a category
 def get_tables_in_category(category_key):
@@ -24,12 +27,20 @@ def get_tables_in_category(category_key):
 st.markdown("### 🧭 Data Selection Wizard")
 st.info("Follow the steps below to systematically explore the DIMSpec database structure.")
 
+# Check if we have any categories available
+if not TABLE_CATEGORIES:
+    st.error("No tables or views found in the database. Please check your database configuration.")
+    st.stop()
+
 # Step 1: Core Selection (Always visible/required)
 st.markdown("#### **Step 1: Core Data Analysis (Start Here)**")
-core_tables = get_tables_in_category("1. Core Data")
-# Default to compounds if not set
+
+# Default to first available table if not set
 if "selected_table" not in st.session_state:
-    st.session_state.selected_table = "compounds"
+    # Get first table from first category
+    first_category = list(TABLE_CATEGORIES.keys())[0]
+    first_table = TABLE_CATEGORIES[first_category][0]
+    st.session_state.selected_table = first_table
 
 # We use columns to create a wizard-like feel
 col1, col2 = st.columns([1, 2])

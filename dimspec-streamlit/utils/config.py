@@ -103,6 +103,42 @@ TABLE_CATEGORIES = {
     ]
 }
 
+def get_available_table_categories(db_path: Path = None) -> dict:
+    """
+    Get table categories filtered by what actually exists in the database.
+    This prevents errors when using sample databases that may not have all tables/views.
+    
+    Args:
+        db_path: Path to database file. If None, uses get_db_path()
+    
+    Returns:
+        Dictionary of categories with only existing tables/views
+    """
+    import sqlite3
+    
+    if db_path is None:
+        db_path = get_db_path()
+    
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type IN ('table', 'view');")
+        available = set([row[0] for row in cursor.fetchall()])
+        conn.close()
+    except Exception as e:
+        # If database connection fails, return empty dict
+        return {}
+    
+    # Filter TABLE_CATEGORIES to only include existing tables/views
+    filtered_categories = {}
+    for category, items in TABLE_CATEGORIES.items():
+        existing_items = [item for item in items if item in available]
+        if existing_items:  # Only include category if it has items
+            filtered_categories[category] = existing_items
+    
+    return filtered_categories
+
+
 PFAS_FAMILIES = [
     "PFCA (Carboxylic Acids)",
     "PFSA (Sulfonic Acids)", 
