@@ -78,23 +78,28 @@ def init_page(page_title: str = None):
 
 TABLE_CATEGORIES = {
     "1. Core Data": [
-        "compounds", "samples", "peaks", "ms_data", "peak_data", "peak_spectra", "qc_data"
+        "compounds", "samples", "peaks", "ms_data", "qc_data", "compound_fragments",
+        "annotated_fragments", "ms_spectra"
     ],
     "2. Reference / Metadata": [
-        "chromatography_types", "mass_analyzers", "ms_methods", "mobile_phases", "qc_methods", 
-        "separation_types", "solvents", "manufacturers", "institutions"
+        "chromatography_descriptions", "ms_descriptions", "ms_methods", "mobile_phases", 
+        "qc_methods", "instrument_properties", "contributors", "affiliations",
+        "carrier_mixes", "carrier_additives", "elements", "isotopes"
     ],
     "3. Normalization": [
         "norm_chromatography_types", "norm_column_chemistries", "norm_sample_classes", 
-        "norm_analytes", "norm_institutions"
+        "norm_carriers", "norm_additives", "norm_ionization", "norm_polarity_types",
+        "norm_ms_types", "norm_fragmentation_types", "norm_peak_confidence"
     ],
     "4. Relationship / Alias": [
         "compound_aliases", "fragment_aliases", "sample_aliases", "carrier_aliases", 
-        "citation_aliases"
+        "additive_aliases"
     ],
     "5. Views (Analysis)": [
         "view_compounds", "view_peaks", "view_samples", "view_fragment_mz_stats", 
-        "view_logs", "view_qc_methods", "view_separation_types", "view_method"
+        "view_logs", "view_qc_methods", "view_separation_types", "view_method",
+        "view_chromatography_types", "view_mass_analyzers", "view_mobile_phases",
+        "view_compound_fragments", "view_ms_methods"
     ]
 }
 
